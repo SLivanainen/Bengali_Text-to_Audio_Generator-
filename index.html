@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bengali Text-to-Audio Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    textarea { width: 100%; height: 150px; font-size: 16px; }
+    button { margin-top: 10px; padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>📢 Bengali Text-to-Audio Generator</h2>
+  <textarea id="text" placeholder="এখানে বাংলা লেখা পেস্ট করুন..."></textarea><br>
+  <button onclick="generateAudio()">🎤 Generate Audio</button>
+  <p id="download-link"></p>
+
+  <script>
+    function generateAudio() {
+      const text = document.getElementById('text').value;
+      fetch('/generate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ text })
+      })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.getElementById('download-link');
+        link.innerHTML = `<a href="${url}" download="bengali_audio.mp3">⬇️ Download Audio</a>`;
+      })
+      .catch(err => alert("Error: " + err));
+    }
+  </script>
+</body>
+</html>
